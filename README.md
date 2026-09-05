@@ -1,5 +1,5 @@
 # StateManager-Luau
-Lightweight client-server state management system for Roblox, featuring selective network replication for high-frequency data.
+Lightweight client-server state management system for Luau, featuring selective network replication for high-frequency data.
 
 ## Features
 * **Automatic memory management:** Uses weak tables (`__mode = "k"`) to garbage collect state data when a character model is destroyed.
@@ -82,6 +82,6 @@ end)
 Using `RemoteEvents` for high-frequency updates (like a mana or stamina bar changing every tick) can quickly flood the remote queue. When the network queue is spammed, it delays other critical, time-sensitive network calls—such as combat hit-registration or important state changes. Roblox's engine optimises Attribute replication natively at the C++ level, handling rapid changes much more efficiently than Lua-invoked `RemoteEvents`.
 
 ### Why PlayerGui for Passive States?
-By default, placing attributes on the Player or Character object replicates those changes to every single client in the server. For rapidly changing values like Stamina, this wastes client bandwidth and clutters the network in large servers. By writing these attributes to a folder inside PlayerGui, the engine is forced to replicate the data only to the local player who owns that GUI.
+By default, placing attributes on the Player or Character object replicates those changes to every single client in the server. For rapidly changing values like health, stamina or mana this wastes client bandwidth and clutters the network in large servers. By writing these attributes to a folder inside PlayerGui, the engine is forced to replicate the data only to the local player who owns that GUI.
 
-Using PlayerGui attributes gives you native C++ replication scoped strictly to the target player, leaving `RemoteEvents` open for essential packets like hit registration.
+Using PlayerGui attributes gives you native C++ replication only on the target players client, leaving `RemoteEvents` open for more essential packets like hit registration or input processing.
